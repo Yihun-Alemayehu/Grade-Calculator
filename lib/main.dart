@@ -20,8 +20,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController? textController;
+  late TextEditingController textController = TextEditingController();
   String finalGrade = '';
+
+  @override
+  void initState() {
+    super.initState();
+    textController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,23 +53,11 @@ class _HomePageState extends State<HomePage> {
           ),
           TextButton(
             onPressed: () {
-              final mark = textController!.text as int;
-              //String output = getGrade(mark);
-              //final int markOf = mark;
-              late final String grade;
-              if (mark > 90) {
-                grade = 'A';
-              } else if (mark > 80) {
-                grade = 'B';
-              } else if (mark > 70) {
-                grade = 'C';
-              } else if (mark > 60) {
-                grade = 'D';
-              } else if (mark < 60) {
-                grade = 'F';
-              }
+              final mark = int.parse(textController.text);
+              String output = getGrade(mark);
+
               setState(() {
-                finalGrade = grade;
+                finalGrade = output;
               });
             },
             child: Container(
@@ -84,7 +78,39 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 40,
           ),
-          Text(finalGrade),
+          finalGrade.isEmpty
+              ? Container(
+                  height: 50,
+                  width: 250,
+                  decoration: const BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: const Center(
+                    child: Text(
+                      'Your Grade will appear here ',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(
+                  height: 50,
+                  width: 200,
+                  decoration: const BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Center(
+                      child: Text(
+                    ' Your Grade is $finalGrade',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ))),
         ],
       ),
     );
